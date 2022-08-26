@@ -1,0 +1,11 @@
+[package]
+name = "no-more-edge-rs"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+percent-encoding = "2.1.0"
+url = "2.2.2"
+# regex = "1.6.0"
