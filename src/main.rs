@@ -1,3 +1,5 @@
+#![windows_subsystem = "windows"]
+
 use percent_encoding::percent_decode_str;
 use std::io::stdin;
 use std::process::Command;
@@ -29,6 +31,7 @@ fn main() {
     args.next();
     // single argument
     args.next();
+    
     // long search string we need to replace
     if let Some(url_argument) = args.next() {
         let capture_getters = [
@@ -58,9 +61,6 @@ fn main() {
             let captured = percent_decode_str(&captured)
                 .decode_utf8()
                 .expect("error unescaping");
-            // let s = ;
-
-            // println!("{s}");
 
             let mut ff = Command::new(r#"C:\Program Files\Firefox Developer Edition\firefox.exe"#);
             match method {
