@@ -32,6 +32,8 @@ use std::process::Command;
 
 use regex::Regex;
 
+use std::time::Instant;
+
 enum Method {
     Url,
     Search,
@@ -77,35 +79,44 @@ pub fn run(url_argument: String) {
             .decode_utf8()
             .expect("error unescaping");
 
-        // let mut ff = Command::new(r#"C:\Program Files\Firefox Developer Edition\firefox.exe"#);
-        let mut ff = Command::new(r#"start"#);
-        match method {
+        let searchArg = match method {
             Method::Search => {
                 let search_string = "https://google.com/search?q=";
-                ff.arg("--new-tab")
-                    .arg([search_string, &captured].join(""))
-                    .spawn()
-                    .expect("ERROR PATH");
+                format!("{}{}", search_string, captured)
             }
-            Method::Url => {
-                ff.arg("--new-tab")
-                    .arg(captured.as_ref())
-                    .spawn()
-                    .expect("ERROR PATH");
-            }
-        }
+            Method::Url => captured.to_string(),
+        };
+
+        time(open_path, &searchArg);
+        time(open_shell, &searchArg);
 
         // println!("{}", captured);
         // pause()
     } else {
         println!("not implemented `{}`", url_argument);
-
-        pause()
+        // pause()
     }
 }
 
+/// Times the amount of time it takes to run a function
+pub fn time(function: fn(&str), argument: &str) {
+    let instant = Instant::now();
+    function(argument);
+    dbg!(instant.elapsed());
+}
+
+/// Opens link using the default browser, with link directly to executable
+pub fn open_path(argument: &str) {
+    let mut browser = Command::new(r#"C:\Program Files\Firefox Developer Edition\firefox.exe"#);
+    browser.arg("--new-tab").arg(argument).spawn().expect("ERROR PATH");
+}
+
+pub fn open_shell(argument: &str) {
+    webbrowser::open(argument).expect("ERRO");
+}
+
 // dbg
-fn pause() {
+pub fn pause() {
     println!("Press enter to continue...");
     let mut buffer = String::new();
     loop {
