@@ -89,11 +89,8 @@ pub fn run(url_argument: String) {
             Method::Url => captured.to_string(),
         };
 
-        time(open_path, &search_arg);
-        time(open_registry, &search_arg);
-
-        // println!("{}", captured);
-        // pause()
+        time(|| open_registry(&search_arg));
+        time(|| open_path(&search_arg));
     } else {
         println!("not implemented `{}`", url_argument);
         // pause()
@@ -101,16 +98,15 @@ pub fn run(url_argument: String) {
 }
 
 /// Times the amount of time it takes to run a function
-pub fn time(function: fn(&str), argument: &str) {
+pub fn time<F: Fn()>(function: F) {
     let instant = Instant::now();
-    function(argument);
+    function();
     dbg!(instant.elapsed());
 }
 
 /// Opens link using the default browser, with link directly to executable
 pub fn open_path(argument: &str) {
-    let mut browser = Command::new(r#"C:\Program Files\Firefox Developer Edition\firefox.exe"#);
-    browser
+    Command::new(r#"C:\Program Files\Firefox Developer Edition\firefox.exe"#)
         .arg("--new-tab")
         .arg(argument)
         .spawn()
@@ -120,16 +116,14 @@ pub fn open_path(argument: &str) {
 pub fn open_registry(argument: &str) {
     // gets the default registry by traversing the registry twice
     // code inspired by https://stackoverflow.com/a/68292700/11742422
-    let hkcu = RegKey::predef(HKEY_CURRENT_USER);
-    let user_choice = hkcu
+    let user_choice = RegKey::predef(HKEY_CURRENT_USER)
         .open_subkey(
             r#"SOFTWARE\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice"#,
         )
         .unwrap();
     let prog_id: String = user_choice.get_value("ProgId").unwrap();
-    let hkcr = RegKey::predef(HKEY_CLASSES_ROOT);
 
-    let command = hkcr
+    let command = RegKey::predef(HKEY_CLASSES_ROOT)
         .open_subkey(format!(r#"{prog_id}\shell\open\command"#))
         .unwrap();
 
@@ -138,8 +132,7 @@ pub fn open_registry(argument: &str) {
     let browser = Regex::new(r#""([^"]*)""#).unwrap();
     let browser = browser.captures(&complex_path).unwrap()[1].to_string();
 
-    let mut browser = Command::new(browser);
-    browser
+    Command::new(browser)
         .arg("--new-tab")
         .arg(argument)
         .spawn()
