@@ -4,7 +4,7 @@ use no_more_edge_rs::{run, pause};
 
 // remove console, because that'd be annoying when we're just trying to start a new tab
 fn main() {
-    let mut args = std::env::args();
+    let args = std::env::args();
     dbg!(args.collect::<Vec<String>>());
 
     let mut args = std::env::args();
@@ -23,5 +23,5 @@ fn main() {
         // println!("{arg}");
         run(arg);
     };
-    pause()
+    // pause()
 }

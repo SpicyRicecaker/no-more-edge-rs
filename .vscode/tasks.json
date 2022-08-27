@@ -12,6 +12,23 @@
 				"isDefault": true
 			},
 			"label": "rust: cargo build"
+		},
+		{
+			"type": "cargo",
+			"command": "run",
+			"problemMatcher": [
+				"$rustc"
+			],
+			"args": [
+				"msedge.exe",
+				"--single-argument",
+				"microsoft-edge:?launchContext1=Microsoft.Windows.Cortana_cw5n1h2txyewy&url=https%3A%2F%2Fwww.bing.com%2Fsearch%3Fq%3Dasdfasdf%26form%3DWNSGPH%26qs%3DSW%26cvid%3D2c259a8e75b246ea960b53c82b31702d%26pq%3Dasdfasdf%26cc%3DUS%26setlang%3Den-US%26nclid%3D18890BD29FA912FCF7001D26D768E0EB%26ts%3D1661561461264%26nclidts%3D1661561461%26tsms%3D264%26wsso%3DOff"
+			],
+			"label": "rust: cargo run with args",
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			}
 		}
 	]
 }
