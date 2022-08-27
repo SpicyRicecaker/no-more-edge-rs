@@ -1,0 +1,1 @@
+reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\msedge.exe" /v "Debugger" /t REG_SZ /d "%homedrive%%homepath%\git\no-more-edge-rs\target\debug\no-more-edge-rs.exe" /f

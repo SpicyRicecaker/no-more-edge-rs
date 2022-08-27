@@ -1,29 +1,30 @@
-//! # no-more-edge-rs
 //!
-//! Replaces edge calls to your default browser
+//! Replaces calls to microsoft edge with calls to your default browser on
+//! windows. Inspired by the c# project
+//! [NoMoreEdge](https://github.com/HarshalKudale/NoMoreEdge).
 //!
 //! ## Installation
-//!
+//! 
+//! Simply downlaod and run the `.msi` installer in releases. 
+//! 
+//! ### Uninstallation
+//! 
+//! Uninstall the program as you would a regular windows program in control
+//! panel. This program basically only registers a single registry key so it's
+//! just a matter of deleting that key.
+//! 
+//! ## Building Manually
+//! 
+//! This project uses [cargo-wix](https://github.com/volks73/cargo-wix) to build the `.msi` installer for the app and write the necessary registry key. Install it via 
+//! 
 //! ```shell
-//! # install the program itself
-//! cargo install no-more-edge-rs
-//! # replace the single registry script
-//! no-more-edge-rs install
+//! cargo install cargo-wix
 //! ```
-//!
-//! ## Uninstall
-//!
+//! 
+//! Then simply run 
+//! 
 //! ```shell
-//! no-more-edge-rs uninstall
-//! cargo uninstall no-more-edge-rs
-//! ```
-//!
-//! ## CLI Options
-//!
-//! Set the default search engine (defaults to google)
-//!
-//! ```shell
-//! no-more-edge-rs set-engine https://google.com?q=
+//! cargo wix
 //! ```
 
 use percent_encoding::percent_decode_str;
@@ -34,7 +35,7 @@ use winreg::RegKey;
 
 use regex::Regex;
 
-use std::time::Instant;
+// use std::time::Instant;
 
 enum Method {
     Url,
@@ -64,7 +65,7 @@ pub fn run(url_argument: String) {
         ),
         // regex would be useful here for optional matchin
         CaptureGetter::new(
-            Regex::new("&url=http(?:s)*%3A%2F%2F(.*)%2F").unwrap(),
+            Regex::new("&url=http(?:s)*%3A%2F%2F(.*)").unwrap(),
             Method::Url,
         ),
     ];
@@ -89,30 +90,14 @@ pub fn run(url_argument: String) {
             Method::Url => captured.to_string(),
         };
 
-        time(|| open_registry(&search_arg));
-        time(|| open_path(&search_arg));
+        open_registry(&search_arg);
     } else {
         println!("not implemented `{}`", url_argument);
         // pause()
     }
 }
 
-/// Times the amount of time it takes to run a function
-pub fn time<F: Fn()>(function: F) {
-    let instant = Instant::now();
-    function();
-    dbg!(instant.elapsed());
-}
-
-/// Opens link using the default browser, with link directly to executable
-pub fn open_path(argument: &str) {
-    Command::new(r#"C:\Program Files\Firefox Developer Edition\firefox.exe"#)
-        .arg("--new-tab")
-        .arg(argument)
-        .spawn()
-        .expect("ERROR PATH");
-}
-
+#[inline(always)]
 pub fn open_registry(argument: &str) {
     // gets the default registry by traversing the registry twice
     // code inspired by https://stackoverflow.com/a/68292700/11742422

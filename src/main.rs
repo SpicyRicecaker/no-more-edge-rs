@@ -1,6 +1,5 @@
-// #![windows_subsystem = "windows"]
-
-use no_more_edge_rs::{run, pause};
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+use no_more_edge_rs::run;
 
 // remove console, because that'd be annoying when we're just trying to start a new tab
 fn main() {
@@ -8,7 +7,7 @@ fn main() {
     dbg!(args.collect::<Vec<String>>());
 
     let mut args = std::env::args();
-    
+
     // rust program itself, so we don't need this
     args.next();
 
@@ -17,11 +16,11 @@ fn main() {
 
     // `--single-argument` is also uneeded
     args.next();
-    
+
     // long search string we need to replace
     if let Some(arg) = args.next() {
         // println!("{arg}");
         run(arg);
     };
-    // pause()
+    // pause();
 }

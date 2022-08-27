@@ -1,4 +1,5 @@
-- [ ] Allow installation and removal of registry through commandline options
-  - How do we make this installation process smooth for the user? 
-- [ ] Allow tuning of the default browser (current hardcodes path to firefox)
+- ~~Allow installation and removal of registry through commandline options~~
+  - ~~How do we make this installation process smooth for the user? ~~
+- [x] Allow tuning of the default browser (current hardcodes path to firefox)
+  - Read registry for default browser path
 - [ ] Allow tuning of the default search engine (currently hardcodes google)
