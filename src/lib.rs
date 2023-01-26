@@ -35,8 +35,6 @@ use winreg::RegKey;
 
 use regex::Regex;
 
-// use std::time::Instant;
-
 enum Method {
     Url,
     Search,
@@ -53,7 +51,10 @@ impl CaptureGetter {
     }
 }
 
+/// This function takes in a search string, (which windows originally intends to
+/// pass into edge.exe), and redirects it to the default browser
 pub fn run(url_argument: String) {
+    // The known patterns of search queries which are given to edge
     let capture_getters = [
         CaptureGetter::new(
             Regex::new("https%3A%2F%2Fwww.bing.com%2Fsearch%3Fq%3D(.*)%26").unwrap(),
@@ -63,7 +64,6 @@ pub fn run(url_argument: String) {
             Regex::new("https%3A%2F%2Fwww.bing.com%2FWS%2Fredirect%2F%3Fq%3D(.*)%26").unwrap(),
             Method::Url,
         ),
-        // regex would be useful here for optional matchin
         CaptureGetter::new(
             Regex::new("&url=http(?:s)*%3A%2F%2F(.*)").unwrap(),
             Method::Url,
@@ -93,7 +93,6 @@ pub fn run(url_argument: String) {
         open_registry(&search_arg);
     } else {
         println!("not implemented `{}`", url_argument);
-        // pause()
     }
 }
 
@@ -124,7 +123,7 @@ pub fn open_registry(argument: &str) {
         .expect("ERROR PATH");
 }
 
-// dbg
+/// When called, waits for input into the console before continuing
 pub fn pause() {
     println!("Press enter to continue...");
     let mut buffer = String::new();
