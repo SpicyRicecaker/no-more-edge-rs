@@ -26,6 +26,8 @@
 //! ```shell
 //! cargo wix
 //! ```
+//! 
+//! Then to install the program, run the `.msi` file in the `./wix` folder.
 
 use percent_encoding::percent_decode_str;
 use std::io::stdin;

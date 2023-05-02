@@ -15,5 +15,5 @@ categories = ["config", "filesystem"]
 
 [dependencies]
 percent-encoding = "2.2.0"
-regex = "1.7.1"
-winreg = "0.10.1"
+regex = "1.8.1"
+winreg = "0.50.0"
