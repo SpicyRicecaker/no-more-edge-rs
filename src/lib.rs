@@ -5,13 +5,13 @@
 //!
 //! ## Installation
 //! 
-//! Simply downlaod and run the `.msi` installer in releases. 
+//! Simply download and run the `.msi` installer in releases. 
 //! 
 //! ### Uninstallation
 //! 
 //! Uninstall the program as you would a regular windows program in control
-//! panel. This program basically only registers a single registry key so it's
-//! just a matter of deleting that key.
+//! panel. This program only registers a single registry key, so uninstallation
+//! is just a matter of deleting that key.
 //! 
 //! ## Building Manually
 //! 
@@ -104,7 +104,7 @@ pub fn open_registry(argument: &str) {
     // code inspired by https://stackoverflow.com/a/68292700/11742422
     let user_choice = RegKey::predef(HKEY_CURRENT_USER)
         .open_subkey(
-            r#"SOFTWARE\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice"#,
+            r"SOFTWARE\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice",
         )
         .unwrap();
     let prog_id: String = user_choice.get_value("ProgId").unwrap();
@@ -125,6 +125,7 @@ pub fn open_registry(argument: &str) {
         .expect("ERROR PATH");
 }
 
+/// A debug function.
 /// When called, waits for input into the console before continuing
 pub fn pause() {
     println!("Press enter to continue...");

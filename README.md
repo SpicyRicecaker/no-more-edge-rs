@@ -25,3 +25,5 @@ Then simply run
 ```shell
 cargo wix
 ```
+
+The installer should then be located at `target\wix\no-more-edge-rs-x.x.x-x86_64.msi`
