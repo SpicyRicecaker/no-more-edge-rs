@@ -4,29 +4,29 @@
 //! [NoMoreEdge](https://github.com/HarshalKudale/NoMoreEdge).
 //!
 //! ## Installation
-//! 
-//! Simply download and run the `.msi` installer in releases. 
-//! 
+//!
+//! Simply download and run the `.msi` installer in releases.
+//!
 //! ### Uninstallation
-//! 
+//!
 //! Uninstall the program as you would a regular windows program in control
 //! panel. This program only registers a single registry key, so uninstallation
 //! is just a matter of deleting that key.
-//! 
+//!
 //! ## Building Manually
-//! 
-//! This project uses [cargo-wix](https://github.com/volks73/cargo-wix) to build the `.msi` installer for the app and write the necessary registry key. Install it via 
-//! 
+//!
+//! This project uses [cargo-wix](https://github.com/volks73/cargo-wix) to build the `.msi` installer for the app and write the necessary registry key. Install it via
+//!
 //! ```shell
 //! cargo install cargo-wix
 //! ```
-//! 
-//! Then simply run 
-//! 
+//!
+//! Then simply run
+//!
 //! ```shell
 //! cargo wix
 //! ```
-//! 
+//!
 //! Then to install the program, run the `.msi` file in the `./wix` folder.
 
 use percent_encoding::percent_decode_str;
@@ -55,7 +55,8 @@ impl CaptureGetter {
 
 /// This function takes in a search string, (which windows originally intends to
 /// pass into edge.exe), and redirects it to the default browser
-pub fn run(url_argument: String) {
+#[inline(always)]
+pub fn run(url_argument: &str) {
     // The known patterns of search queries which are given to edge
     let capture_getters = [
         CaptureGetter::new(
@@ -75,7 +76,7 @@ pub fn run(url_argument: String) {
     let captured = capture_getters.into_iter().find_map(|capture_getter| {
         capture_getter
             .regex
-            .captures(&url_argument)
+            .captures(url_argument)
             .map(|t| (t[1].to_string(), capture_getter.method))
     });
 
@@ -100,7 +101,7 @@ pub fn run(url_argument: String) {
 
 #[inline(always)]
 pub fn open_registry(argument: &str) {
-    // gets the default registry by traversing the registry twice
+    // gets the default registry value by traversing the registry twice
     // code inspired by https://stackoverflow.com/a/68292700/11742422
     let user_choice = RegKey::predef(HKEY_CURRENT_USER)
         .open_subkey(
@@ -116,7 +117,7 @@ pub fn open_registry(argument: &str) {
     let complex_path: String = command.get_value("").unwrap();
 
     let browser = Regex::new(r#""([^"]*)""#).unwrap();
-    let browser = browser.captures(&complex_path).unwrap()[1].to_string();
+    let browser = &browser.captures(&complex_path).unwrap()[1];
 
     Command::new(browser)
         .arg("--new-tab")
@@ -127,6 +128,7 @@ pub fn open_registry(argument: &str) {
 
 /// A debug function.
 /// When called, waits for input into the console before continuing
+#[inline(always)]
 pub fn pause() {
     println!("Press enter to continue...");
     let mut buffer = String::new();

@@ -16,6 +16,6 @@ fn main() {
 
     // long search string we need to replace
     if let Some(arg) = args.next() {
-        run(arg);
+        run(&arg);
     };
 }
