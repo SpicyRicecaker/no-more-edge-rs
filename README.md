@@ -1,10 +1,10 @@
 # no-more-edge-rs
 
-Replaces calls to microsoft edge with calls to your default browser on windows. Inspired by the c# project [NoMoreEdge](https://github.com/HarshalKudale/NoMoreEdge).
+Replaces calls to microsoft edge with calls to your default browser on windows. Inspired by the C# project [NoMoreEdge](https://github.com/HarshalKudale/NoMoreEdge).
 
 ## Installation
 
-Simply downlaod and run the `.msi` installer in releases. 
+Simply download and run the `.msi` installer in releases. 
 
 ### Uninstallation
 
